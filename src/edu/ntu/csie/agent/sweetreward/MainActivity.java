@@ -9,7 +9,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -28,6 +31,7 @@ public class MainActivity extends Activity {
 	private String mToken;
 	private String APIDomain = "http://disa.csie.ntu.edu.tw";
 	private String APIPath = "~blt/sweetreward/php";
+	private MediaPlayer mMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +40,9 @@ public class MainActivity extends Activity {
         
         webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
-		webView.loadUrl("http://disa.csie.ntu.edu.tw/~blt/sweetreward/");		
+		webView.loadUrl("http://disa.csie.ntu.edu.tw/~blt/sweetreward/");
+		
+		mMediaPlayer = MediaPlayer.create(this, R.raw.reward);
     }
     
     @Override
@@ -85,13 +91,9 @@ public class MainActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                
                 // Handle successful scan
-                contents = "1,0";
-                Log.e(TAG, contents);
-                
                 String[] contentsArray = contents.split(",");
-                
-                Log.e(TAG, contentsArray[0] + "," + contentsArray[1]);
                 
                 // call api
                 String httpUrl = "";
@@ -106,7 +108,6 @@ public class MainActivity extends Activity {
                 	httpUrl = "";
                 	Log.e(TAG, "Error: unknown QRCode type");
                 }
-                Log.e(TAG, httpUrl);
                 
                 if(httpUrl != "") {
                 	PostWindow p = new PostWindow();
@@ -125,7 +126,7 @@ public class MainActivity extends Activity {
     private class PostWindow extends AsyncTask <String, Integer, String> {
     	@Override
 		protected String doInBackground(String... params) {
-    		Log.e(TAG, "url: " + params[0]);
+    		//Log.e(TAG, "url: " + params[0]);
             HttpGet request = new HttpGet(params[0]);
             HttpClient httpClient = new DefaultHttpClient();
             
@@ -148,8 +149,24 @@ public class MainActivity extends Activity {
 	    @Override
 	    protected void onPostExecute(String result) {	    	
 	    	// parse result
-        	Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-	    	
+	    	JSONObject json = null;
+        	int status = 1;
+        	int getFeedback = 0;
+			try {
+				//Log.e(TAG, "result: " + result);
+				json = new JSONObject(result);
+				status = json.getInt("status");
+				getFeedback = json.getInt("get_feedback");
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+					
+			if(status == 0)
+				Toast.makeText(getApplicationContext(), "Thank you!", Toast.LENGTH_LONG).show();
+			if(getFeedback == 1) {
+				mMediaPlayer.start();
+			}
+			
 	    	super.onPostExecute(result);
 	    }
 
