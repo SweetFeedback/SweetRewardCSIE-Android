@@ -45,16 +45,7 @@ public class SettingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        /*
-        String[] strings = new String[] {
-        	"account", "password"	
-        };
-		mListView = (ListView) findViewById(R.id.ListView);
-		mListView.setAdapter(new ArrayAdapter<String>(this,
-				 android.R.layout.simple_list_item_1, strings));
-		
-		mListView.setTextFilterEnabled(true);
-		*/
+        
 		mSettings = getSharedPreferences ("SweetReward", MODE_PRIVATE);
 		mSettingEditor = mSettings.edit();
 		
@@ -109,7 +100,7 @@ public class SettingActivity extends Activity {
 	    		Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
 	    		return;
 	    	}
-        	result = result.replace("existed", "");
+	    	Log.e(TAG, result);
         	
         	JSONObject json = null;
         	String token = "";
@@ -124,9 +115,6 @@ public class SettingActivity extends Activity {
         	mSettingEditor.putString("token", token);
         	mSettingEditor.commit();
         	Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
-	    	
-        	mToken = mSettings.getString("token", "");
-        	
         	
 	    	super.onPostExecute(result);
 	    }

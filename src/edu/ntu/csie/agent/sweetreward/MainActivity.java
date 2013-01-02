@@ -9,8 +9,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,7 +25,6 @@ public class MainActivity extends Activity {
 	static private String TAG = "SweetReward";
 	private WebView webView;
 	private SharedPreferences mSettings;
-	private SharedPreferences.Editor mSettingEditor;
 	private String mToken;
 	private String APIDomain = "http://disa.csie.ntu.edu.tw";
 	private String APIPath = "~blt/sweetreward/php";
@@ -60,13 +57,16 @@ public class MainActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
 	    	case R.id.menu_scan:
+	    		IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
+	    		integrator.initiateScan();
+	    		/*
 	    		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
 	            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
 	            startActivityForResult(intent, 0);
-	            
+	            */
 	    		break;
 	    	case R.id.menu_settings:
-	    		intent = new Intent(this, SettingActivity.class);
+	    		Intent intent = new Intent(this, SettingActivity.class);
 	            this.startActivity(intent);
 	            
 	    		break;
@@ -80,7 +80,8 @@ public class MainActivity extends Activity {
     
     
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
+    	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+    	if (scanResult != null) {
             if (resultCode == RESULT_OK) {
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
