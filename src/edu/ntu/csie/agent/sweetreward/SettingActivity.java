@@ -19,20 +19,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class SettingActivity extends Activity {
 	static private String TAG = "Setting";
 
-	private ListView mListView;
 	private SharedPreferences mSettings;
 	private SharedPreferences.Editor mSettingEditor;
-	private String mToken;
 	private String APIDomain = "http://disa.csie.ntu.edu.tw";
 	private String APIPath = "~blt/sweetreward/php";
 	
@@ -51,6 +46,13 @@ public class SettingActivity extends Activity {
 		
         mEditTextAccount = (EditText) findViewById(R.id.edit_text_account);
         mEditTextPassword = (EditText) findViewById(R.id.edit_text_password);
+        
+        String account = mSettings.getString("account", "");
+        String password = mSettings.getString("password", "");
+        
+        mEditTextAccount.setText(account);
+        mEditTextPassword.setText(password);
+        
         mButtonSubmit = (Button) findViewById(R.id.button_submit);
         mButtonSubmit.setOnClickListener(new OnClickListener() {
 			@Override
@@ -59,6 +61,7 @@ public class SettingActivity extends Activity {
 		    	String password = mEditTextPassword.getText().toString();
 		    	
 				login(account, password);
+				finish();
 			}
         });
     }
@@ -100,10 +103,11 @@ public class SettingActivity extends Activity {
 	    		Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_LONG).show();
 	    		return;
 	    	}
-	    	Log.e(TAG, result);
+	    	//Log.e(TAG, result);
         	
         	JSONObject json = null;
         	String token = "";
+	    	
 			try {
 				json = new JSONObject(result);
 				token = json.get("token").toString();
@@ -111,7 +115,11 @@ public class SettingActivity extends Activity {
 				e.printStackTrace();
 			}
 			
-			mToken = token;
+        	String account = mEditTextAccount.getText().toString();
+	    	String password = mEditTextPassword.getText().toString();
+	    	//Log.e(TAG, account + " " + password);
+        	mSettingEditor.putString("account", account);
+        	mSettingEditor.putString("password", password);
         	mSettingEditor.putString("token", token);
         	mSettingEditor.commit();
         	Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();

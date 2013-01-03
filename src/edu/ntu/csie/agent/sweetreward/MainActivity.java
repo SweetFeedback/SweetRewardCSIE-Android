@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
 
 		mSettings = getSharedPreferences ("SweetReward", MODE_PRIVATE);
 		mToken = mSettings.getString("token", "");
+		Log.e(TAG, "token; " + mToken);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class MainActivity extends Activity {
     private class PostWindow extends AsyncTask <String, Integer, String> {
     	@Override
 		protected String doInBackground(String... params) {
-    		//Log.e(TAG, "url: " + params[0]);
+    		Log.e(TAG, "url: " + params[0]);
             HttpGet request = new HttpGet(params[0]);
             HttpClient httpClient = new DefaultHttpClient();
             
@@ -153,18 +154,22 @@ public class MainActivity extends Activity {
         	int status = 1;
         	int getFeedback = 0;
 			try {
-				//Log.e(TAG, "result: " + result);
 				json = new JSONObject(result);
 				status = json.getInt("status");
 				getFeedback = json.getInt("get_feedback");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			
+			Log.e(TAG, "result: " + result + " feedback: " + getFeedback);
 					
-			if(status == 0)
-				Toast.makeText(getApplicationContext(), "Thank you!", Toast.LENGTH_LONG).show();
-			if(getFeedback == 1) {
+			if(status == 0 && getFeedback == 0) {
+				Toast.makeText(getApplicationContext(), "Thank you!", Toast.LENGTH_SHORT).show();
+			} else if(status == 0 && getFeedback == 1) {
+				Toast.makeText(getApplicationContext(), "Thank you! Go get some candies!", Toast.LENGTH_SHORT).show();
 				mMediaPlayer.start();
+			} else {
+				Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
 			}
 			
 	    	super.onPostExecute(result);
