@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
         webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
 		webView.loadUrl("http://disa.csie.ntu.edu.tw/~blt/sweetreward/");
+		webView.getSettings().setJavaScriptEnabled(true);
 		
 		mMediaPlayer = MediaPlayer.create(this, R.raw.reward);
     }
