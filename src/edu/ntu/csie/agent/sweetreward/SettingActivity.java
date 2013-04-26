@@ -23,7 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends Activity implements OnTaskCompleted {
 	static private String TAG = "Setting";
 
 	private SharedPreferences mSettings;
@@ -35,6 +35,7 @@ public class SettingActivity extends Activity {
 	private EditText mEditTextPassword;
 	private Button mButtonSubmit;
 
+	private ServerConnection serverConnection = ServerConnection.getServerConnection();
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +61,22 @@ public class SettingActivity extends Activity {
 				String account = mEditTextAccount.getText().toString();
 		    	String password = mEditTextPassword.getText().toString();
 		    	
-				login(account, password);
+		    	serverConnection.login(account, password, SettingActivity.this);
 				finish();
 			}
         });
     }
 	
+	public void onLoginSuccessfully(String token) {
+		
+	}
+	/*
 	private void login(String account, String password) {
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
     	CreateAccount c = new CreateAccount();
     	c.execute(httpUrl);
-    }
-	
+    }	
 
     private class CreateAccount extends AsyncTask <String, Integer, String> {
 		@Override
@@ -127,6 +131,21 @@ public class SettingActivity extends Activity {
 	    	super.onPostExecute(result);
 	    }
     }
+    */
+
+	@Override
+	public void onTaskCompleted(String token) {
+		//Toast.makeText(this, "Login successfully", Toast.LENGTH_SHORT).show();
+		String account = mEditTextAccount.getText().toString();
+    	String password = mEditTextPassword.getText().toString();
+    	//Log.e(TAG, account + " " + password);
+    	
+    	mSettingEditor.putString("account", account);
+    	mSettingEditor.putString("password", password);
+    	mSettingEditor.putString("token", token);
+    	mSettingEditor.commit();
+		
+	}
 
 
 }
