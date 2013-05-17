@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 
@@ -26,28 +25,55 @@ public class ServerConnection {
 	private String APIPath = "~blt/sweetreward/php";
 	private String APIDomain = "http://disa.csie.ntu.edu.tw";
 	
+	private User mUser = User.getUser();
 	
-	private Context context_;
+	private Context mContext;
 	
-	public static ServerConnection serverConnection;
-
+	public static ServerConnection sSingleton;
+	
+	//private SharedPreferences mSettings;
+	//private String mToken;
+	
 	public static ServerConnection getServerConnection() {
-		if(serverConnection == null)
-			serverConnection = new ServerConnection();
-		return serverConnection;
+	    return sSingleton;
+	}
+
+	public static ServerConnection getServerConnection(Context context) {
+		if(sSingleton == null)
+			sSingleton = new ServerConnection();
+		
+		sSingleton.setContext(context);
+		return sSingleton;
 	}
 	
 	private ServerConnection() {
-		
+	    
+	}
+	
+	private void setContext(Context context) {
+	    this.mContext = context;
 	}
 	
 	public void login(String account, String password, SettingActivity context) {
-		context_ = context;
+		mContext = context;
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
-    	LoginTask task = new LoginTask((SettingActivity)context_);
+    	LoginTask task = new LoginTask((SettingActivity)mContext);
     	task.execute(httpUrl);
     }
+	
+	public void reportWindow(int windowID, int action) {
+	    String token = mUser.getToken();
+		String httpUrl = "";
+		if (action == -1) {
+			httpUrl = String.format("%s/%s/userActionTrigger.php?window_id=%d&token=%s", APIDomain, APIPath, windowID, token);
+		} else if (action != -1) {
+			httpUrl= String.format("%s/%s/userActionTrigger.php?window_id=%d&token=%s&action=%d", APIDomain, APIPath, windowID, token, action);
+		}
+		
+		//PostWindowTask task = new PostWindowTask((MainActivity)mContext);
+		//task.execute(httpUrl);
+	}
 	
 
     private class LoginTask extends AsyncTask <String, Integer, String> {
@@ -59,7 +85,6 @@ public class ServerConnection {
     	
     	@Override
     	protected void onPreExecute() {
-    		// set loading icon
     	}
     	
 		@Override
@@ -85,14 +110,11 @@ public class ServerConnection {
 
 	    @Override
 	    protected void onPostExecute(String result) {
-	    	// remove loading icon
-	    	
-	    	// parse result
+	        super.onPostExecute(result);
 	    	if(result == null) {
-	    		Toast.makeText(context_, "Login failed", Toast.LENGTH_LONG).show();
+	    		Toast.makeText(mContext, "Login failed", Toast.LENGTH_LONG).show();
 	    		return;
 	    	}
-	    	//Log.e(TAG, result);
         	
         	JSONObject json = null;
         	String token = "";
@@ -105,17 +127,25 @@ public class ServerConnection {
 			}
 			
 			listener.onTaskCompleted(token);
-        	Toast.makeText(context_, "Login successfully", Toast.LENGTH_SHORT).show();
-        	
-	    	super.onPostExecute(result);
 	    }
     }
     
-    /*
-    private class PostWindow extends AsyncTask <String, Integer, String> {
+    
+    private class PostWindowTask extends AsyncTask <String, Integer, String> {
+        private OnTaskCompleted listener;
+        
+        public PostWindowTask(OnTaskCompleted listener) {
+            this.listener = listener;
+        }
+        
+        @Override
+        protected void onPreExecute() {
+            // set loading icon
+        }
+        
     	@Override
 		protected String doInBackground(String... params) {
-    		Log.e(TAG, "url: " + params[0]);
+    		//Log.e(TAG, "url: " + params[0]);
             HttpGet request = new HttpGet(params[0]);
             HttpClient httpClient = new DefaultHttpClient();
             
@@ -136,7 +166,9 @@ public class ServerConnection {
 		
 
 	    @Override
-	    protected void onPostExecute(String result) {	    	
+	    protected void onPostExecute(String result) {
+	        super.onPostExecute(result);
+	        
 	    	// parse result
 	    	JSONObject json = null;
         	int status = 1;
@@ -149,22 +181,22 @@ public class ServerConnection {
 				e.printStackTrace();
 			}
 			
-			Log.e(TAG, "result: " + result + " feedback: " + getFeedback);
+			//Log.e(TAG, "result: " + result + " feedback: " + getFeedback);
 					
 			if(status == 0 && getFeedback == 0) {
-				Toast.makeText(context_, "Thank you!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
 			} else if(status == 0 && getFeedback == 1) {
-				Toast.makeText(context_, "Thank you! Go get some candies!", Toast.LENGTH_SHORT).show();
-				mMediaPlayer.start();
+				Toast.makeText(mContext, "Thank you! Go get some candies!", Toast.LENGTH_SHORT).show();
+				//mMediaPlayer.start();
 			} else {
-				Toast.makeText(context_, "Error!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Error!", Toast.LENGTH_SHORT).show();
 			}
 			
-	    	super.onPostExecute(result);
+	    	
 	    }
 
     }
-    */
+    
 
 
 	
