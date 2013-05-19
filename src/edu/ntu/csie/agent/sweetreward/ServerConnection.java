@@ -54,7 +54,7 @@ public class ServerConnection {
 	    this.mContext = context;
 	}
 	
-	public void login(String account, String password, FacebookLoginFragment context) {
+	public void login(String account, String password, LoginFragment context) {
 		
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
@@ -112,10 +112,8 @@ public class ServerConnection {
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
 	    	if(result == null) {
-	    		Toast.makeText(mContext, "Login failed", Toast.LENGTH_LONG).show();
 	    		return;
 	    	}
-        	
         	JSONObject json = null;
         	String token = "";
 	    	

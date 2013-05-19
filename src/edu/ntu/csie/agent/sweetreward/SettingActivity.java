@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentActivity;
 public class SettingActivity extends FragmentActivity {
 	//static private String TAG = "Setting";
 	
-	private FacebookLoginFragment mFacebookLoginFragment;
+	private LoginFragment mFacebookLoginFragment;
 		
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,14 +15,14 @@ public class SettingActivity extends FragmentActivity {
         
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
-            mFacebookLoginFragment = new FacebookLoginFragment();
+            mFacebookLoginFragment = new LoginFragment();
             getSupportFragmentManager()
             .beginTransaction()
             .add(android.R.id.content, mFacebookLoginFragment)
             .commit();
         } else {
             // Or set the fragment from restored state info
-            mFacebookLoginFragment = (FacebookLoginFragment) getSupportFragmentManager()
+            mFacebookLoginFragment = (LoginFragment) getSupportFragmentManager()
             .findFragmentById(android.R.id.content);
         }
    

@@ -21,8 +21,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
-    private static final String TAG = "FacebookLoginFragment";
+public class LoginFragment extends Fragment implements OnTaskCompleted {
+    private static final String TAG = "LoginFragment";
     
     private UiLifecycleHelper uiHelper;
     
@@ -56,7 +56,7 @@ public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.facebook_login_fragment, container, false);
+        View view = inflater.inflate(R.layout.login_fragment, container, false);
         
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
@@ -64,15 +64,12 @@ public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
         mWelcome = (TextView) view.findViewById(R.id.welcome);
         
         
-        
-        /*
         serverConnection = ServerConnection.getServerConnection(this.getActivity().getApplicationContext());
         
         mProgress = (LinearLayout) view.findViewById(R.id.headerProgressLinearLayout);
         mEditTextAccount = (EditText) view.findViewById(R.id.edit_text_account);
         mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_password);
         
-        mWelcome = (TextView) view.findViewById(R.id.welcome);
         
         String account = mUser.getAccount();
         String password = mUser.getPassword();
@@ -83,15 +80,14 @@ public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
         mButtonSubmit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                LoginFragment.this.mProgress.setVisibility(View.VISIBLE);
+                
                 String account = mEditTextAccount.getText().toString();
                 String password = mEditTextPassword.getText().toString();
-                FacebookLoginFragment.this.mProgress.setVisibility(View.VISIBLE);
-                
-                serverConnection.login(account, password, FacebookLoginFragment.this);
-
+                serverConnection.login(account, password, LoginFragment.this);
             }
         });
-        */
+        
 
         return view;
     }
@@ -150,15 +146,23 @@ public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
     
     @Override
     public void onTaskCompleted(String token) {
-        /*
         this.mProgress.setVisibility(View.GONE);
-        String account = mEditTextAccount.getText().toString();
-        String password = mEditTextPassword.getText().toString();
         
+        String account = "";
+        String password = "";
+        if("".equals(token)) {
+            mWelcome.setText("Login failed");
+        } else {
+            account = mEditTextAccount.getText().toString();
+            password = mEditTextPassword.getText().toString();
+            mWelcome.setText("Welcome, " + account);
+        }
         mUser.setAccount(account);
         mUser.setPassword(password);
         mUser.setToken(token);
-        */
+        
+        
+        
     }
     
     private void makeMeRequest(final Session session) {
@@ -173,7 +177,7 @@ public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
                     if (user != null) {
                         mUser.setFacebookID(user.getId());
                         mUser.setFacebookName(user.getName());
-                        mWelcome.setText("hi " + mUser.getFacebookID() + " " + mUser.getFacebookName());
+                        mWelcome.setText("Hello " + mUser.getFacebookName());
                     }
                 }
                 if (response.getError() != null) {
