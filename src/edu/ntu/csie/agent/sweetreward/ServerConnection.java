@@ -54,11 +54,11 @@ public class ServerConnection {
 	    this.mContext = context;
 	}
 	
-	public void login(String account, String password, SettingActivity context) {
-		mContext = context;
+	public void login(String account, String password, FacebookLoginFragment context) {
+		
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
-    	LoginTask task = new LoginTask((SettingActivity)mContext);
+    	LoginTask task = new LoginTask(context);
     	task.execute(httpUrl);
     }
 	

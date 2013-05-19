@@ -1,8 +1,11 @@
 package edu.ntu.csie.agent.sweetreward;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
 import android.content.Intent;
@@ -12,11 +15,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class FacebookLoginFragment extends Fragment {
+public class FacebookLoginFragment extends Fragment implements OnTaskCompleted {
     private static final String TAG = "FacebookLoginFragment";
     
     private UiLifecycleHelper uiHelper;
+    
+    private User mUser;
+    
+    private EditText mEditTextAccount;
+    private EditText mEditTextPassword;
+    private TextView mWelcome;
+    private Button mButtonSubmit;
+    
+    private LinearLayout mProgress;
+
+
+    private ServerConnection serverConnection;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -31,7 +51,7 @@ public class FacebookLoginFragment extends Fragment {
         uiHelper = new UiLifecycleHelper(getActivity(), callback);
         uiHelper.onCreate(savedInstanceState);
         
-        
+        mUser = User.getUser();
     }
     
     @Override
@@ -40,6 +60,38 @@ public class FacebookLoginFragment extends Fragment {
         
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
+        
+        mWelcome = (TextView) view.findViewById(R.id.welcome);
+        
+        
+        
+        /*
+        serverConnection = ServerConnection.getServerConnection(this.getActivity().getApplicationContext());
+        
+        mProgress = (LinearLayout) view.findViewById(R.id.headerProgressLinearLayout);
+        mEditTextAccount = (EditText) view.findViewById(R.id.edit_text_account);
+        mEditTextPassword = (EditText) view.findViewById(R.id.edit_text_password);
+        
+        mWelcome = (TextView) view.findViewById(R.id.welcome);
+        
+        String account = mUser.getAccount();
+        String password = mUser.getPassword();
+        mEditTextAccount.setText(account);
+        mEditTextPassword.setText(password);
+
+        mButtonSubmit = (Button) view.findViewById(R.id.button_submit);
+        mButtonSubmit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String account = mEditTextAccount.getText().toString();
+                String password = mEditTextPassword.getText().toString();
+                FacebookLoginFragment.this.mProgress.setVisibility(View.VISIBLE);
+                
+                serverConnection.login(account, password, FacebookLoginFragment.this);
+
+            }
+        });
+        */
 
         return view;
     }
@@ -54,6 +106,7 @@ public class FacebookLoginFragment extends Fragment {
         Session session = Session.getActiveSession();
         if (session != null &&
                (session.isOpened() || session.isClosed()) ) {
+            Log.d(TAG, "on resume");
             onSessionStateChange(session, session.getState(), null);
         }
         uiHelper.onResume();
@@ -85,11 +138,52 @@ public class FacebookLoginFragment extends Fragment {
     
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
-            Log.i(TAG, "Logged in...");
+            makeMeRequest(session);
         } else if (state.isClosed()) {
-            Log.i(TAG, "Logged out...");
+            Log.d(TAG, "Logged out...");
+            mWelcome.setText("LOGout");
+            mUser.setFacebookID("");
+            mUser.setFacebookName("");
         }
     }
+    
+    
+    @Override
+    public void onTaskCompleted(String token) {
+        /*
+        this.mProgress.setVisibility(View.GONE);
+        String account = mEditTextAccount.getText().toString();
+        String password = mEditTextPassword.getText().toString();
+        
+        mUser.setAccount(account);
+        mUser.setPassword(password);
+        mUser.setToken(token);
+        */
+    }
+    
+    private void makeMeRequest(final Session session) {
+        // Make an API call to get user data and define a 
+        // new callback to handle the response.
+        Request request = Request.newMeRequest(session, 
+                new Request.GraphUserCallback() {
+            @Override
+            public void onCompleted(GraphUser user, Response response) {
+                // If the response is successful
+                if (session == Session.getActiveSession()) {
+                    if (user != null) {
+                        mUser.setFacebookID(user.getId());
+                        mUser.setFacebookName(user.getName());
+                        mWelcome.setText("hi " + mUser.getFacebookID() + " " + mUser.getFacebookName());
+                    }
+                }
+                if (response.getError() != null) {
+                    // Handle errors, will do so later.
+                }
+            }
+        });
+        request.executeAsync();
+    } 
+    
     
 
 }

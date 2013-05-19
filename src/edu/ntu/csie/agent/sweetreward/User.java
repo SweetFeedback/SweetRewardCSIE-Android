@@ -9,6 +9,9 @@ public class User {
     private String mPassword;
     private String mToken;
     
+    private String mFacebookID;
+    private String mFacebookName;
+    
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mSettingEditor;
     
@@ -43,6 +46,14 @@ public class User {
         return mToken;
     }
     
+    public String getFacebookName() {
+        return mFacebookName;
+    }
+    
+    public String getFacebookID() {
+        return mFacebookID;
+    }
+    
     public void setAccount(String account) {
         mAccount = account;
         mSettingEditor.putString("account", account);
@@ -59,6 +70,14 @@ public class User {
         mToken = token;
         mSettingEditor.putString("token", token);
         mSettingEditor.commit();
+    }
+    
+    public void setFacebookID(String id) {
+        mFacebookID = id;
+    }
+    
+    public void setFacebookName(String name) {
+        mFacebookName = name;
     }
     
     
