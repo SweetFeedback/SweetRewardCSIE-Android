@@ -18,6 +18,9 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 
 	private MediaPlayer mMediaPlayer;
 	
+	
+	//GoogleCloudMessaging gcm;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

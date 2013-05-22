@@ -4,17 +4,35 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="16" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16" />
     
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
+    <permission android:name="edu.ntu.csie.agent.sweetreward.permission.C2D_MESSAGE" 
+        android:protectionLevel="signature" />
+    <uses-permission android:name="edu.ntu.csie.agent.sweetreward.permission.C2D_MESSAGE" />
+
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        
+        <receiver
+            android:name=".MyBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="edu.ntu.csie.agent.sweetreward" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".MyIntentService" />
+        
         <activity
             android:name="edu.ntu.csie.agent.sweetreward.MainActivity"
             android:label="@string/app_name"
@@ -30,6 +48,7 @@
             android:name="edu.ntu.csie.agent.sweetreward.SettingActivity"
             android:screenOrientation="portrait" >
         </activity>
+        
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id" />
         <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name"></activity>
         
