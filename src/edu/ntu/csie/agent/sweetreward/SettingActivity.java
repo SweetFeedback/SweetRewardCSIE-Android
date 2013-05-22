@@ -12,7 +12,6 @@ public class SettingActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-        /*
         
         if (savedInstanceState == null) {
             // Add the fragment on initial activity setup
@@ -26,7 +25,7 @@ public class SettingActivity extends FragmentActivity {
             mFacebookLoginFragment = (LoginFragment) getSupportFragmentManager()
             .findFragmentById(android.R.id.content);
         }
-        */
+        
    
     }
 }
