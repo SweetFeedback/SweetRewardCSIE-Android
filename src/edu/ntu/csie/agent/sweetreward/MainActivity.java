@@ -1,5 +1,7 @@
 package edu.ntu.csie.agent.sweetreward;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,9 +19,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	private ServerConnection serverConnection;
 
 	private MediaPlayer mMediaPlayer;
-	
-	
-	//GoogleCloudMessaging gcm;
+
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {

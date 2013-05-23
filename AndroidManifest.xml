@@ -14,7 +14,7 @@
     <permission android:name="edu.ntu.csie.agent.sweetreward.permission.C2D_MESSAGE" 
         android:protectionLevel="signature" />
     <uses-permission android:name="edu.ntu.csie.agent.sweetreward.permission.C2D_MESSAGE" />
-    
+
     
 
     <application
