@@ -1,6 +1,9 @@
 package edu.ntu.csie.agent.sweetreward;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -38,6 +41,7 @@ public class ServerConnection {
 	    return sSingleton;
 	}
 
+	
 	public static ServerConnection getServerConnection(Context context) {
 		if(sSingleton == null)
 			sSingleton = new ServerConnection();
@@ -73,6 +77,19 @@ public class ServerConnection {
 		
 		//PostWindowTask task = new PostWindowTask((MainActivity)mContext);
 		//task.execute(httpUrl);
+	}
+	
+	public ArrayList<Map<String,String>> getProblemList() {
+		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
+		
+		for (int i = 0; i < 10; i++) {
+			Map<String,String> item = new HashMap<String,String>();
+			item.put("title", Integer.toString(i));
+			item.put("time", Integer.toString(i+100));
+			list.add(item);
+		}
+		
+		return list;
 	}
 	
 

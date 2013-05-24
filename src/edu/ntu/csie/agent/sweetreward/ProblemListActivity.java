@@ -20,6 +20,10 @@ public class ProblemListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.problem_list);
         
+        List<Map<String,String>> data = ServerConnection.getServerConnection().getProblemList();  	
+        SimpleAdapter adapter = new SimpleAdapter(this, data, android.R.layout.simple_list_item_2, new String[] {"title", "time"}, new int[] { android.R.id.text1, android.R.id.text2 });
+        mProblemList = (ListView) findViewById(R.id.ProblemListLinearLayout);
+        mProblemList.setAdapter(adapter);
         
     }
 }
