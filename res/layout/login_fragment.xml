@@ -33,8 +33,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:hint="Account"
-        android:text="sweetreward"/>
+        android:hint="@string/account" />
     
     <EditText  
         android:id="@+id/edit_text_password"
@@ -42,13 +41,12 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:singleLine="true"
-        android:hint="Password"
-        android:text="test"/>
+        android:hint="@string/password" />
     <Button
         android:id="@+id/button_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="submit" />
+        android:text="@string/submit" />
     
     <TextView
         android:id="@+id/welcome"

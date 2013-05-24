@@ -5,5 +5,9 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_scan">Scan</string>
     <string name="app_id">340305429406081</string>
+    
+    <string name="account">Account</string>
+    <string name="password">Password</string>
+    <string name="submit">Send</string>
 
 </resources>
