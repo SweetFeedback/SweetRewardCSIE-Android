@@ -4,6 +4,20 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
     
+    <LinearLayout
+        android:id="@+id/headerProgressLinearLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+        <ProgressBar
+            android:id="@+id/headerProgress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+    </LinearLayout>
     
     <ListView
         android:id="@+id/ProblemListLinearLayout"

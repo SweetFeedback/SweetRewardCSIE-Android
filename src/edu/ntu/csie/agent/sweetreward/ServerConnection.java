@@ -17,10 +17,13 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Debug;
+import android.util.Log;
 import android.widget.Toast;
 
 
 public class ServerConnection {
+	private static final String TAG = ServerConnection.class.getSimpleName();
 
 	/**
 	 * @param args
@@ -31,6 +34,8 @@ public class ServerConnection {
 	private User mUser = User.getUser();
 	
 	private Context mContext;
+	
+	private ArrayList<Map<String,String>> mProblems;
 	
 	public static ServerConnection sSingleton;
 	
@@ -79,7 +84,14 @@ public class ServerConnection {
 		//task.execute(httpUrl);
 	}
 	
+	public void getProblemListFromServer(OnTaskCompleted listener) {
+		String httpUrl = String.format("%s/%s/getUnsolveProblemRoomRank.php", APIDomain, APIPath);
+		GetProblemTask task = new GetProblemTask(listener);
+		task.execute(httpUrl);
+	}
+	
 	public ArrayList<Map<String,String>> getProblemList() {
+		Log.d(TAG, "get problem");
 		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
 		
 		for (int i = 0; i < 10; i++) {
@@ -89,7 +101,51 @@ public class ServerConnection {
 			list.add(item);
 		}
 		
-		return list;
+			
+		mProblems = list;
+		
+		return mProblems;
+	}
+	
+	private class GetProblemTask extends AsyncTask <String, Integer, String> {
+		private OnTaskCompleted listener;
+		
+		public GetProblemTask(OnTaskCompleted listener) {
+			this.listener = listener;
+		}
+		
+    	@Override
+    	protected void onPreExecute() {
+    	}
+    	
+		@Override
+		protected String doInBackground(String... params) {
+            HttpGet request = new HttpGet(params[0]);
+            HttpClient httpClient = new DefaultHttpClient();
+            
+
+            try {
+                HttpResponse response = httpClient.execute(request);
+                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                	String str = EntityUtils.toString(response.getEntity());
+                	return str;
+                }
+            } catch (ClientProtocolException e) {
+            	e.printStackTrace();    
+            } catch (IOException e) {
+            	e.printStackTrace();
+            }
+    	
+			return null;
+		}
+		
+
+	    @Override
+	    protected void onPostExecute(String result) {
+	        super.onPostExecute(result);
+	        Log.d(TAG, result);
+	        listener.onTaskCompleted(result);
+	    }
 	}
 	
 

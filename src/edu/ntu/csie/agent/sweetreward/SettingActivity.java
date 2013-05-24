@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 public class SettingActivity extends FragmentActivity {
-	//static private String TAG = "Setting";
+	private static final String TAG = SettingActivity.class.getSimpleName();
 	
 	private LoginFragment mFacebookLoginFragment;
 		
