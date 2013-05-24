@@ -51,6 +51,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent intent;
     	switch(item.getItemId()) {
 	    	case R.id.menu_scan:
 	    		IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
@@ -62,9 +63,14 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	            */
 	    		break;
 	    	case R.id.menu_settings:
-	    		Intent intent = new Intent(this, SettingActivity.class);
+	    		intent = new Intent(this, SettingActivity.class);
 	            this.startActivity(intent);
 	            
+	    		break;
+	    		
+	    	case R.id.menu_problem_list:
+	    		intent = new Intent(this, ProblemListActivity.class);
+	            this.startActivity(intent);
 	    		break;
     		default:
     			break;
