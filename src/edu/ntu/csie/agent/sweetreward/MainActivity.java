@@ -10,7 +10,8 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 public class MainActivity extends Activity implements OnTaskCompleted {
-	static private String TAG = "SweetReward";
+	private static final String TAG = MainActivity.class.getSimpleName();
+	
 	private WebView webView;
 	
 	private User mUser;

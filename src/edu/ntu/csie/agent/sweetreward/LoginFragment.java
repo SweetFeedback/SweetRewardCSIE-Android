@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LoginFragment extends Fragment implements OnTaskCompleted {
-    private static final String TAG = "LoginFragment";
+	private static final String TAG = LoginFragment.class.getSimpleName();
     
     private UiLifecycleHelper uiHelper;
     
