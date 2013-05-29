@@ -22,8 +22,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	private ServerConnection serverConnection;
 
 	private MediaPlayer mMediaPlayer;
-	
-	
+		
 	//GoogleCloudMessaging gcm;
 	
     @Override
@@ -32,7 +31,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         setContentView(R.layout.activity_main);
         
         mUser = User.getUser(getApplicationContext());
-        serverConnection = ServerConnection.getServerConnection(getApplicationContext());
+        serverConnection = ServerConnection.getServerConnection();
         
         webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
@@ -121,8 +120,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
     
 	@Override
 	public void onTaskCompleted(String result) {
-		// TODO Auto-generated method stub
-
     	// parse result
     	JSONObject json = null;
     	int status = 1;

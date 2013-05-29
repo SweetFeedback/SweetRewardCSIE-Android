@@ -67,7 +67,7 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
         mWelcome = (TextView) view.findViewById(R.id.welcome);
         
         
-        serverConnection = ServerConnection.getServerConnection(this.getActivity().getApplicationContext());
+        serverConnection = ServerConnection.getServerConnection();
         
         mProgress = (LinearLayout) view.findViewById(R.id.headerProgressLinearLayout);
         mEditTextAccount = (EditText) view.findViewById(R.id.edit_text_account);

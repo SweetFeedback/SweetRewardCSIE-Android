@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 public class ProblemListActivity extends Activity implements OnTaskCompleted {
 	private static final String TAG = ProblemListActivity.class.getSimpleName();
@@ -27,6 +26,7 @@ public class ProblemListActivity extends Activity implements OnTaskCompleted {
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "Start ProblemListActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.problem_list);
         
@@ -35,12 +35,11 @@ public class ProblemListActivity extends Activity implements OnTaskCompleted {
         
         mProgress.setVisibility(View.VISIBLE);
         ServerConnection.getServerConnection().getProblemList(this);
-        
-        
     }
 	
 	@Override
     public void onTaskCompleted(String jsonString) {
+		Log.d(TAG, "Received server result");
 		List<Map<String,String>> problemList = new ArrayList<Map<String,String>>();
     	// parse result
     	JSONObject json = null;
@@ -60,6 +59,7 @@ public class ProblemListActivity extends Activity implements OnTaskCompleted {
 		}
 
 		// set adapter
+		Log.d(TAG, "Set listview adapter");
         SimpleAdapter adapter = new SimpleAdapter(this, problemList, android.R.layout.simple_list_item_2, new String[] {"title", "created_at"}, new int[] { android.R.id.text1, android.R.id.text2 });
         mProblemList.setAdapter(adapter);
         this.mProgress.setVisibility(View.GONE);    

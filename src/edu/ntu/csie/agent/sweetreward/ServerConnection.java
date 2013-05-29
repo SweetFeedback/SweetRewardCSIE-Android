@@ -26,49 +26,25 @@ import android.widget.Toast;
 public class ServerConnection {
 	private static final String TAG = ServerConnection.class.getSimpleName();
 
-	/**
-	 * @param args
-	 */
 	private String APIPath = "/";
 	private String APIDomain = "http://disa.csie.ntu.edu.tw:1234";
 	
 	private User mUser = User.getUser();
 	
-	private Context mContext;
-	
-	private ArrayList<Map<String,String>> mProblems;
-	
 	public static ServerConnection sSingleton;
 	
-	//private SharedPreferences mSettings;
-	//private String mToken;
 	
 	public static ServerConnection getServerConnection() {
-	    return sSingleton;
-	}
-
-	
-	public static ServerConnection getServerConnection(Context context) {
 		if(sSingleton == null)
 			sSingleton = new ServerConnection();
-		
-		sSingleton.setContext(context);
-		return sSingleton;
+	    return sSingleton;
 	}
 	
-	private ServerConnection() {
-	    
-	}
-	
-	private void setContext(Context context) {
-	    this.mContext = context;
-	}
-	
-	public void login(String account, String password, LoginFragment context) {
+	public void login(String account, String password, OnTaskCompleted listener) {
 		
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
-    	ServerTask task = new ServerTask(context);
+    	ServerTask task = new ServerTask(listener);
     	task.execute(httpUrl);
     }
 	
@@ -86,7 +62,7 @@ public class ServerConnection {
 	}
 	
 	public void getProblemList(OnTaskCompleted listener) {
-		String api = "reports";
+		String api = "reports/unsolved";
 		String httpUrl = String.format("%s/%s", APIDomain, api);
 		ServerTask task = new ServerTask(listener);
 		task.execute(httpUrl);
@@ -107,6 +83,8 @@ public class ServerConnection {
 		protected String doInBackground(String... params) {
             HttpGet request = new HttpGet(params[0]);
             HttpClient httpClient = new DefaultHttpClient();
+            
+            Log.d(TAG, "Run request: " + request);
             
             try {
                 HttpResponse response = httpClient.execute(request);
@@ -129,7 +107,6 @@ public class ServerConnection {
 	        super.onPostExecute(result);
 	        listener.onTaskCompleted(result);
 	    }
-
     }
     
 
