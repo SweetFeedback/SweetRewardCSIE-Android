@@ -61,6 +61,13 @@ public class ServerConnection {
 		task.execute(httpUrl);
 	}
 	
+	public void reportProblem(OnTaskCompleted listener) {
+		Log.d(TAG, "Send problem");
+		String httpUrl = "";
+		ServerTask task = new ServerTask(listener);
+		//task.execute(httpUrl);
+	}
+	
 	public void getProblemList(OnTaskCompleted listener) {
 		String api = "reports/unsolved";
 		String httpUrl = String.format("%s/%s", APIDomain, api);

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+    
+    
+    <EditText  
+        android:id="@+id/report_problem_edit_text_problem_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="Title (optional)"
+        android:singleLine="true" />
+    
+    <EditText  
+        android:id="@+id/report_problem_edit_text_problem_desc"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:inputType="text" />
+    
+    <Button
+        android:id="@+id/report_problem_button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit" />
+    
+    
+</LinearLayout>

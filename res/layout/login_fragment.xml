@@ -43,10 +43,10 @@
         android:singleLine="true"
         android:hint="@string/password" />
     <Button
-        android:id="@+id/button_submit"
+        android:id="@+id/button_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit" />
+        android:text="@string/login" />
     
     <TextView
         android:id="@+id/welcome"

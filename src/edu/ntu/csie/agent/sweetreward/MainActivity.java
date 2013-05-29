@@ -60,30 +60,29 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	    	case R.id.menu_scan:
 	    		IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
 	    		integrator.initiateScan();
-	    		/*
-	    		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-	            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-	            startActivityForResult(intent, 0);
-	            */
 	    		break;
+	    		
 	    	case R.id.menu_settings:
 	    		intent = new Intent(this, SettingActivity.class);
 	            this.startActivity(intent);
-	            
 	    		break;
 	    		
 	    	case R.id.menu_problem_list:
 	    		intent = new Intent(this, ProblemListActivity.class);
 	            this.startActivity(intent);
 	    		break;
+	    		
+	    	case R.id.menu_report_problem:
+	    		intent = new Intent(this, ReportProblemActivity.class);
+	            this.startActivity(intent);
+	    		break;
+
     		default:
     			break;
     	}
     	
     	return super.onOptionsItemSelected(item);
     }
-    
-    
     
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);

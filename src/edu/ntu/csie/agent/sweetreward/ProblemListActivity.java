@@ -28,7 +28,7 @@ public class ProblemListActivity extends Activity implements OnTaskCompleted {
     protected void onCreate(Bundle savedInstanceState) {
 		Log.d(TAG, "Start ProblemListActivity");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.problem_list);
+        setContentView(R.layout.activity_problem_list);
         
         mProgress = (LinearLayout) findViewById(R.id.headerProgressLinearLayout);
         mProblemList = (ListView) findViewById(R.id.ProblemListLinearLayout);

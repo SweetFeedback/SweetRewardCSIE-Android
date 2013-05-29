@@ -15,5 +15,10 @@
         android:orderInCategory="200"
         android:title="@string/menu_problem_list"/>
     
+    <item
+        android:id="@+id/menu_report_problem"
+        android:orderInCategory="250"
+        android:title="@string/menu_report_problem"/>
+    
 
 </menu>

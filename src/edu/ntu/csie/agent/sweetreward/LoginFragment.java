@@ -79,7 +79,7 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
         mEditTextAccount.setText(account);
         mEditTextPassword.setText(password);
 
-        mButtonSubmit = (Button) view.findViewById(R.id.button_submit);
+        mButtonSubmit = (Button) view.findViewById(R.id.button_login);
         mButtonSubmit.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
