@@ -1,5 +1,8 @@
 package edu.ntu.csie.agent.sweetreward;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
@@ -8,17 +11,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnTaskCompleted {
-	static private String TAG = "SweetReward";
+	private static final String TAG = MainActivity.class.getSimpleName();
+	
 	private WebView webView;
 	
 	private User mUser;
 	private ServerConnection serverConnection;
 
 	private MediaPlayer mMediaPlayer;
-	
-	
+		
 	//GoogleCloudMessaging gcm;
 	
     @Override
@@ -27,7 +31,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         setContentView(R.layout.activity_main);
         
         mUser = User.getUser(getApplicationContext());
-        serverConnection = ServerConnection.getServerConnection(getApplicationContext());
+        serverConnection = ServerConnection.getServerConnection();
         
         webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
@@ -51,6 +55,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
     }
     
     public boolean onOptionsItemSelected(MenuItem item) {
+    	Intent intent;
     	switch(item.getItemId()) {
 	    	case R.id.menu_scan:
 	    		IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
@@ -62,9 +67,14 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	            */
 	    		break;
 	    	case R.id.menu_settings:
-	    		Intent intent = new Intent(this, SettingActivity.class);
+	    		intent = new Intent(this, SettingActivity.class);
 	            this.startActivity(intent);
 	            
+	    		break;
+	    		
+	    	case R.id.menu_problem_list:
+	    		intent = new Intent(this, ProblemListActivity.class);
+	            this.startActivity(intent);
 	    		break;
     		default:
     			break;
@@ -98,7 +108,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
                 	Log.e(TAG, "Error: unknown QRCode type");
                 }
                 
-                serverConnection.reportWindow(windowID, action);
+                serverConnection.reportWindow(this, windowID, action);
                 
                 
             } else if (resultCode == RESULT_CANCELED) {
@@ -110,7 +120,28 @@ public class MainActivity extends Activity implements OnTaskCompleted {
     
 	@Override
 	public void onTaskCompleted(String result) {
-		// TODO Auto-generated method stub
+    	// parse result
+    	JSONObject json = null;
+    	int status = 1;
+    	int getFeedback = 0;
+		try {
+			json = new JSONObject(result);
+			status = json.getInt("status");
+			getFeedback = json.getInt("get_feedback");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		//Log.e(TAG, "result: " + result + " feedback: " + getFeedback);
+				
+		if(status == 0 && getFeedback == 0) {
+			Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
+		} else if(status == 0 && getFeedback == 1) {
+			Toast.makeText(this, "Thank you! Go get some candies!", Toast.LENGTH_SHORT).show();
+			mMediaPlayer.start();
+		} else {
+			Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show();
+		}
 		
 	}
     

@@ -1,5 +1,8 @@
 package edu.ntu.csie.agent.sweetreward;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -22,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LoginFragment extends Fragment implements OnTaskCompleted {
-    private static final String TAG = "LoginFragment";
+	private static final String TAG = LoginFragment.class.getSimpleName();
     
     private UiLifecycleHelper uiHelper;
     
@@ -64,7 +67,7 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
         mWelcome = (TextView) view.findViewById(R.id.welcome);
         
         
-        serverConnection = ServerConnection.getServerConnection(this.getActivity().getApplicationContext());
+        serverConnection = ServerConnection.getServerConnection();
         
         mProgress = (LinearLayout) view.findViewById(R.id.headerProgressLinearLayout);
         mEditTextAccount = (EditText) view.findViewById(R.id.edit_text_account);
@@ -144,26 +147,6 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
     }
     
     
-    @Override
-    public void onTaskCompleted(String token) {
-        this.mProgress.setVisibility(View.GONE);
-        
-        String account = "";
-        String password = "";
-        if("".equals(token)) {
-            mWelcome.setText("Login failed");
-        } else {
-            account = mEditTextAccount.getText().toString();
-            password = mEditTextPassword.getText().toString();
-            mWelcome.setText("Welcome, " + account);
-        }
-        mUser.setAccount(account);
-        mUser.setPassword(password);
-        mUser.setToken(token);
-        
-        
-        
-    }
     
     private void makeMeRequest(final Session session) {
         // Make an API call to get user data and define a 
@@ -186,7 +169,40 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
             }
         });
         request.executeAsync();
-    } 
+    }
+
+	@Override
+	public void onTaskCompleted(String jsonString) {
+		// TODO Auto-generated method stub
+		if(jsonString == null) {
+    		return;
+    	}
+    	JSONObject json = null;
+    	String token = "";
+    	
+		try {
+			json = new JSONObject(jsonString);
+			token = json.get("token").toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		this.mProgress.setVisibility(View.GONE);
+        
+        String account = "";
+        String password = "";
+        if("".equals(token)) {
+            mWelcome.setText("Login failed");
+        } else {
+            account = mEditTextAccount.getText().toString();
+            password = mEditTextPassword.getText().toString();
+            mWelcome.setText("Welcome, " + account);
+        }
+        mUser.setAccount(account);
+        mUser.setPassword(password);
+        mUser.setToken(token);
+		
+	} 
     
     
 

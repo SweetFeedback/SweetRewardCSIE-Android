@@ -2,14 +2,17 @@ package edu.ntu.csie.agent.sweetreward;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 public class SettingActivity extends FragmentActivity {
-	//static private String TAG = "Setting";
+	private static final String TAG = SettingActivity.class.getSimpleName();
 	
 	private LoginFragment mFacebookLoginFragment;
 		
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "Start SettingActivity");
+		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         
