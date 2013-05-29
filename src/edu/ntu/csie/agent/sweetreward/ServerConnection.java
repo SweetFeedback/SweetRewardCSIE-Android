@@ -12,6 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,8 +29,8 @@ public class ServerConnection {
 	/**
 	 * @param args
 	 */
-	private String APIPath = "~blt/sweetreward/php";
-	private String APIDomain = "http://disa.csie.ntu.edu.tw";
+	private String APIPath = "/";
+	private String APIDomain = "http://disa.csie.ntu.edu.tw:1234";
 	
 	private User mUser = User.getUser();
 	
@@ -84,28 +85,13 @@ public class ServerConnection {
 		//task.execute(httpUrl);
 	}
 	
-	public void getProblemListFromServer(OnTaskCompleted listener) {
-		String httpUrl = String.format("%s/%s/getUnsolveProblemRoomRank.php", APIDomain, APIPath);
+	public void getProblemList(OnTaskCompleted listener) {
+		String api = "reports";
+		String httpUrl = String.format("%s/%s", APIDomain, api);
 		GetProblemTask task = new GetProblemTask(listener);
 		task.execute(httpUrl);
 	}
 	
-	public ArrayList<Map<String,String>> getProblemList() {
-		Log.d(TAG, "get problem");
-		ArrayList<Map<String,String>> list = new ArrayList<Map<String,String>>();
-		
-		for (int i = 0; i < 10; i++) {
-			Map<String,String> item = new HashMap<String,String>();
-			item.put("title", Integer.toString(i));
-			item.put("time", Integer.toString(i+100));
-			list.add(item);
-		}
-		
-			
-		mProblems = list;
-		
-		return mProblems;
-	}
 	
 	private class GetProblemTask extends AsyncTask <String, Integer, String> {
 		private OnTaskCompleted listener;
@@ -143,7 +129,6 @@ public class ServerConnection {
 	    @Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
-	        Log.d(TAG, result);
 	        listener.onTaskCompleted(result);
 	    }
 	}
@@ -184,20 +169,7 @@ public class ServerConnection {
 	    @Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
-	    	if(result == null) {
-	    		return;
-	    	}
-        	JSONObject json = null;
-        	String token = "";
-	    	
-			try {
-				json = new JSONObject(result);
-				token = json.get("token").toString();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-			listener.onTaskCompleted(token);
+			listener.onTaskCompleted(result);
 	    }
     }
     
