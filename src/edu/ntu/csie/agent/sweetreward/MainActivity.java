@@ -1,5 +1,8 @@
 package edu.ntu.csie.agent.sweetreward;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.app.Activity;
@@ -8,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnTaskCompleted {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -105,7 +109,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
                 	Log.e(TAG, "Error: unknown QRCode type");
                 }
                 
-                serverConnection.reportWindow(windowID, action);
+                serverConnection.reportWindow(this, windowID, action);
                 
                 
             } else if (resultCode == RESULT_CANCELED) {
@@ -118,6 +122,29 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	@Override
 	public void onTaskCompleted(String result) {
 		// TODO Auto-generated method stub
+
+    	// parse result
+    	JSONObject json = null;
+    	int status = 1;
+    	int getFeedback = 0;
+		try {
+			json = new JSONObject(result);
+			status = json.getInt("status");
+			getFeedback = json.getInt("get_feedback");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		//Log.e(TAG, "result: " + result + " feedback: " + getFeedback);
+				
+		if(status == 0 && getFeedback == 0) {
+			Toast.makeText(this, "Thank you!", Toast.LENGTH_SHORT).show();
+		} else if(status == 0 && getFeedback == 1) {
+			Toast.makeText(this, "Thank you! Go get some candies!", Toast.LENGTH_SHORT).show();
+			mMediaPlayer.start();
+		} else {
+			Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show();
+		}
 		
 	}
     

@@ -68,11 +68,11 @@ public class ServerConnection {
 		
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
-    	LoginTask task = new LoginTask(context);
+    	ServerTask task = new ServerTask(context);
     	task.execute(httpUrl);
     }
 	
-	public void reportWindow(int windowID, int action) {
+	public void reportWindow(OnTaskCompleted listener, int windowID, int action) {
 	    String token = mUser.getToken();
 		String httpUrl = "";
 		if (action == -1) {
@@ -81,114 +81,30 @@ public class ServerConnection {
 			httpUrl= String.format("%s/%s/userActionTrigger.php?window_id=%d&token=%s&action=%d", APIDomain, APIPath, windowID, token, action);
 		}
 		
-		//PostWindowTask task = new PostWindowTask((MainActivity)mContext);
-		//task.execute(httpUrl);
+		ServerTask task = new ServerTask(listener);
+		task.execute(httpUrl);
 	}
 	
 	public void getProblemList(OnTaskCompleted listener) {
 		String api = "reports";
 		String httpUrl = String.format("%s/%s", APIDomain, api);
-		GetProblemTask task = new GetProblemTask(listener);
+		ServerTask task = new ServerTask(listener);
 		task.execute(httpUrl);
 	}
-	
-	
-	private class GetProblemTask extends AsyncTask <String, Integer, String> {
-		private OnTaskCompleted listener;
-		
-		public GetProblemTask(OnTaskCompleted listener) {
-			this.listener = listener;
-		}
-		
-    	@Override
-    	protected void onPreExecute() {
-    	}
-    	
-		@Override
-		protected String doInBackground(String... params) {
-            HttpGet request = new HttpGet(params[0]);
-            HttpClient httpClient = new DefaultHttpClient();
-            
-
-            try {
-                HttpResponse response = httpClient.execute(request);
-                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                	String str = EntityUtils.toString(response.getEntity());
-                	return str;
-                }
-            } catch (ClientProtocolException e) {
-            	e.printStackTrace();    
-            } catch (IOException e) {
-            	e.printStackTrace();
-            }
-    	
-			return null;
-		}
-		
-
-	    @Override
-	    protected void onPostExecute(String result) {
-	        super.onPostExecute(result);
-	        listener.onTaskCompleted(result);
-	    }
-	}
-	
-
-    private class LoginTask extends AsyncTask <String, Integer, String> {
-    	private OnTaskCompleted listener;
-    	
-    	public LoginTask(OnTaskCompleted listener) {
-    		this.listener = listener;
-    	}
-    	
-    	@Override
-    	protected void onPreExecute() {
-    	}
-    	
-		@Override
-		protected String doInBackground(String... params) {
-            HttpGet request = new HttpGet(params[0]);
-            HttpClient httpClient = new DefaultHttpClient();
-            
-            try {
-                HttpResponse response = httpClient.execute(request);
-                if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                	String str = EntityUtils.toString(response.getEntity());
-                	return str;
-                }
-            } catch (ClientProtocolException e) {
-            	e.printStackTrace();    
-            } catch (IOException e) {
-            	e.printStackTrace();
-            }
-    	
-			return null;
-		}
-		
-
-	    @Override
-	    protected void onPostExecute(String result) {
-	        super.onPostExecute(result);
-			listener.onTaskCompleted(result);
-	    }
-    }
     
-    
-    private class PostWindowTask extends AsyncTask <String, Integer, String> {
+    private class ServerTask extends AsyncTask <String, Integer, String> {
         private OnTaskCompleted listener;
         
-        public PostWindowTask(OnTaskCompleted listener) {
+        public ServerTask(OnTaskCompleted listener) {
             this.listener = listener;
         }
         
         @Override
         protected void onPreExecute() {
-            // set loading icon
         }
         
     	@Override
 		protected String doInBackground(String... params) {
-    		//Log.e(TAG, "url: " + params[0]);
             HttpGet request = new HttpGet(params[0]);
             HttpClient httpClient = new DefaultHttpClient();
             
@@ -211,31 +127,7 @@ public class ServerConnection {
 	    @Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);
-	        
-	    	// parse result
-	    	JSONObject json = null;
-        	int status = 1;
-        	int getFeedback = 0;
-			try {
-				json = new JSONObject(result);
-				status = json.getInt("status");
-				getFeedback = json.getInt("get_feedback");
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-			//Log.e(TAG, "result: " + result + " feedback: " + getFeedback);
-					
-			if(status == 0 && getFeedback == 0) {
-				Toast.makeText(mContext, "Thank you!", Toast.LENGTH_SHORT).show();
-			} else if(status == 0 && getFeedback == 1) {
-				Toast.makeText(mContext, "Thank you! Go get some candies!", Toast.LENGTH_SHORT).show();
-				//mMediaPlayer.start();
-			} else {
-				Toast.makeText(mContext, "Error!", Toast.LENGTH_SHORT).show();
-			}
-			
-	    	
+	        listener.onTaskCompleted(result);
 	    }
 
     }
