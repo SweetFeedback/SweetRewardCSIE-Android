@@ -76,6 +76,25 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	    		intent = new Intent(this, ProblemListActivity.class);
 	            this.startActivity(intent);
 	    		break;
+	    		
+	    	case R.id.menu_send_feedback:
+	    		Intent Email = new Intent(Intent.ACTION_SEND);
+	            Email.setType("text/email");
+	            Email.putExtra(Intent.EXTRA_EMAIL, new String[] { "admin@hotmail.com" });
+	            Email.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
+	            Email.putExtra(Intent.EXTRA_TEXT, "Dear SweetFeedback,\n\n");
+	            startActivity(Intent.createChooser(Email, "Send Feedback:"));
+	            break;
+	            
+	            // it seems this will work if the app is on the market
+	    		/*
+	    		intent = new Intent(Intent.ACTION_APP_ERROR);
+	    	    startActivity(intent);
+	    	    break;
+	    	    */
+	    		
+	    		
+	    		
     		default:
     			break;
     	}
