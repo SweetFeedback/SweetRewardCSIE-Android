@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.bool;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -64,21 +65,22 @@ public class ServerConnection {
         }
 	}
 	
-	public void login(String account, String password, OnTaskCompleted listener) {
+	public Boolean login(String account, String password, OnTaskCompleted listener) {
 		if (!isNetworkAvailable()) {
 			Log.d(TAG, "login, NO network");
-			return;
+			return false;
 		}
     	String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
     	
     	ServerTask task = new ServerTask(listener);
     	task.execute(httpUrl);
+    	return true;
     }
 	
-	public void reportWindow(OnTaskCompleted listener, int windowID, int action) {
+	public Boolean reportWindow(OnTaskCompleted listener, int windowID, int action) {
 		if (!isNetworkAvailable()) {
 			Log.d(TAG, "report window, NO network");
-			return;
+			return false;
 		}
 		
 	    String token = mUser.getToken();
@@ -91,18 +93,22 @@ public class ServerConnection {
 		
 		ServerTask task = new ServerTask(listener);
 		task.execute(httpUrl);
+		
+		return true;
 	}
 	
-	public void getProblemList(OnTaskCompleted listener) {
+	public Boolean getProblemList(OnTaskCompleted listener) {
 		if (!isNetworkAvailable()) {
 			Log.d(TAG, "get problem list, NO network");
-			return;
+			return false;
 		}
 		
 		String api = "reports/unsolved";
 		String httpUrl = String.format("%s/%s", APIDomain, api);
 		ServerTask task = new ServerTask(listener);
 		task.execute(httpUrl);
+		
+		return true;
 	}
     
     private class ServerTask extends AsyncTask <String, Integer, String> {

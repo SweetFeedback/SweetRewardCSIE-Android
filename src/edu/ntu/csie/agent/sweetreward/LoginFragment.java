@@ -87,7 +87,9 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
                 
                 String account = mEditTextAccount.getText().toString();
                 String password = mEditTextPassword.getText().toString();
-                serverConnection.login(account, password, LoginFragment.this);
+                if (!serverConnection.login(account, password, LoginFragment.this)) {
+                	LoginFragment.this.mProgress.setVisibility(View.GONE);
+                }
             }
         });
         
