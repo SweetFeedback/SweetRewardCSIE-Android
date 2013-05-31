@@ -20,5 +20,10 @@
         android:orderInCategory="250"
         android:title="@string/menu_report_problem"/>
     
+	<item
+        android:id="@+id/menu_send_feedback"
+        android:orderInCategory="300"
+        android:title="@string/menu_send_feedback"/>
+    
 
 </menu>
