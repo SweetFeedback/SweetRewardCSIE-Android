@@ -32,6 +32,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         
         mUser = User.getUser(getApplicationContext());
         serverConnection = ServerConnection.getServerConnection();
+        serverConnection.setContext(getApplicationContext());
         
         webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
