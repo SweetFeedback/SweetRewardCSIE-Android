@@ -44,7 +44,7 @@ public class ProblemListActivity extends Activity implements OnTaskCompleted {
         mProgress = (LinearLayout) findViewById(R.id.headerProgressLinearLayout);
         mProblemList = (ListView) findViewById(R.id.ProblemListLinearLayout);
         
-        mNoNetworkTextView = (TextView) findViewById(R.id.noNetworkTextView);
+        mNoNetworkTextView = (TextView) findViewById(R.id.noNetworkTextView_ProblemList);
         mNoNetworkTextView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

@@ -97,11 +97,16 @@ public class ServerConnection {
 		return true;
 	}
 	
-	public void reportProblem(OnTaskCompleted listener) {
+	public Boolean reportProblem(OnTaskCompleted listener) {
+		if (!isNetworkAvailable()) {
+			Log.d(TAG, "login, NO network");
+			return false;
+		}
 		Log.d(TAG, "Send problem");
 		String httpUrl = "";
 		ServerTask task = new ServerTask(listener);
 		//task.execute(httpUrl);
+		return true;
 	}
 	
 

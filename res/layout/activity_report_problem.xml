@@ -4,27 +4,46 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
     
-    
-    <EditText  
-        android:id="@+id/report_problem_edit_text_problem_title"
+    <TextView
+        android:id="@+id/noNetworkTextView_reportProblem"
+        android:text="@string/no_network"
+        android:visibility="gone"
+        android:background="#AA0000"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:singleLine="true"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="Title (optional)"
-        android:singleLine="true" />
+        android:layout_height="30sp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical" />
     
-    <EditText  
-        android:id="@+id/report_problem_edit_text_problem_desc"
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content"
-        android:hint="Description"
-        android:inputType="text" />
-    
-    <Button
-        android:id="@+id/report_problem_button_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Submit" />
-    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="30"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/report_problem_edit_text_problem_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title (optional)"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <EditText
+            android:id="@+id/report_problem_edit_text_problem_desc"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/report_problem_button_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+    </LinearLayout>
     
 </LinearLayout>

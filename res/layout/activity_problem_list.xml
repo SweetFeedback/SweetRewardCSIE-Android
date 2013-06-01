@@ -5,8 +5,8 @@
     android:orientation="vertical" >
     
     <TextView
-        android:id="@+id/noNetworkTextView"
-        android:text="No Network Connection"
+        android:id="@+id/noNetworkTextView_ProblemList"
+        android:text="@string/no_network"
         android:visibility="gone"
         android:background="#AA0000"
         android:textSize="20sp"
