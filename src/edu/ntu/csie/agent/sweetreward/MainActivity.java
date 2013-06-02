@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+
 public class MainActivity extends Activity implements OnTaskCompleted {
 	private static final String TAG = MainActivity.class.getSimpleName();
 	
@@ -30,7 +31,9 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	private MediaPlayer mMediaPlayer;
 	
 	public static final String PROPERTY_REG_ID = "registration_id";
-	String GCM_SENDER_ID = "411973252223";
+	
+	// Louis' key: "411973252223"
+	String GCM_SENDER_ID = "104069007708";
 	
 	private GoogleCloudMessaging gcm;
 	SharedPreferences prefs;
@@ -58,10 +61,12 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 		// If there is no registration ID, the app isn't registered.
         // Call registerBackground() to register it.
 		gcm = GoogleCloudMessaging.getInstance(this);
+		
         if (regid == null) {
         	Log.d(TAG, "start register GCM");
             registerBackground();
         }
+        
 		
     }
 
@@ -76,14 +81,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
                     regid = gcm.register(GCM_SENDER_ID);
                     msg = "Device registered, registration id=" + regid;
 
-                    // You should send the registration ID to your server over HTTP, 
-                    // so it can use GCM/HTTP or CCS to send messages to your app.
-
-                    // For this demo: we don't need to send it because the device  
-                    // will send upstream messages to a server that will echo back 
-                    // the message using the 'from' address in the message. 
-            
-                    // Save the regid for future use - no need to register again.
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(PROPERTY_REG_ID, regid);
                     editor.commit();
