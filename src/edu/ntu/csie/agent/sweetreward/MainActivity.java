@@ -55,9 +55,8 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 		// If there is no registration ID, the app isn't registered.
         // Call registerBackground() to register it.
 		gcm = GoogleCloudMessaging.getInstance(this);
-		Log.d(TAG, "regid = " + regid);
         if (regid == null) {
-        	Log.d(TAG, "start register");
+        	Log.d(TAG, "start register GCM");
             registerBackground();
         }
 		
@@ -69,7 +68,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
         	
             @Override
             protected Object doInBackground(Object... params) {
-            	Log.d(TAG, "do in background");
                 String msg = "";
                 try {
                     regid = gcm.register(GCM_SENDER_ID);
@@ -84,7 +82,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
             
                     // Save the regid for future use - no need to register again.
                     SharedPreferences.Editor editor = prefs.edit();
-                    Log.d(TAG, "regid: " + regid);
                     editor.putString(PROPERTY_REG_ID, regid);
                     editor.commit();
                 } catch (IOException ex) {
@@ -92,12 +89,10 @@ public class MainActivity extends Activity implements OnTaskCompleted {
                 }
                 return msg;
             }
-            // Once registration is done, display the registration status
-            // string in the Activity's UI.
+            
             @Override
             protected void onPostExecute(Object msg) {
-            	Log.d(TAG, "regid: " + msg);
-            	//Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG);
+            	Log.d(TAG, "register done: " + msg);
             }
         }.execute(null, null, null);
     }

@@ -30,15 +30,15 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
             sendNotification("Deleted messages on server: " + 
                     intent.getExtras().toString());
         } else {
-            handleMessage(intent.getExtras());
-            sendNotification("Received: You've Got Mail");
+            String content = handleMessage(intent.getExtras());
+            sendNotification(content);
         }
         setResultCode(Activity.RESULT_OK);
     }
     
-    private void handleMessage(Bundle bundle) {
+    private String handleMessage(Bundle bundle) {
     	Log.d(TAG, "handle message: " + bundle.getString("data"));
-
+    	return bundle.getString("data");
     }
     
     // Put the GCM message into a notification and post it.
@@ -52,7 +52,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
       NotificationCompat.Builder mBuilder =
           new NotificationCompat.Builder(ctx)
           .setSmallIcon(R.drawable.ic_launcher)
-          .setContentTitle("GCM Notification")
+          .setContentTitle("SweetFeedback Notification")
           .setStyle(new NotificationCompat.BigTextStyle()
                      .bigText(msg))
           .setContentText(msg);
