@@ -56,6 +56,7 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
           new NotificationCompat.Builder(ctx)
           .setSmallIcon(R.drawable.ic_launcher)
           .setContentTitle("SweetFeedback")
+          .setAutoCancel(true)
           .setStyle(new NotificationCompat.BigTextStyle()
                      .bigText(msg))
           .setContentText(msg);
