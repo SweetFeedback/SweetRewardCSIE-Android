@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -23,11 +24,15 @@ public class TaskActivity extends Activity {
 		Bundle bundle = this.getIntent().getExtras();
 		String msg = bundle.getString("content");
     	Log.d(TAG, "content: " + msg);
+    	
+    	
 		
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	LayoutInflater inflater = getLayoutInflater();;
     	View view = inflater.inflate(R.layout.dialog_notification, null);
     	mSeekBar = (SeekBar) view.findViewById(R.id.dialog_notification_annoy_seekbar);
+
+    
     	//TextView msgTextView = (TextView) view.findViewById(R.id.dialog_notification_msg_textview);
     	//msgTextView.setText(msg);
     	

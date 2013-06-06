@@ -3,14 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    
+
+    <LinearLayout
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:contentDescription="angry"
+            android:src="@drawable/angry" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:contentDescription="annoy"
+            android:src="@drawable/annoy" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:contentDescription="okay"
+            android:src="@drawable/okay" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:contentDescription="smile"
+            android:src="@drawable/smile" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:contentDescription="love"
+            android:src="@drawable/love" />
+    </LinearLayout>
+
     <SeekBar
         android:id="@+id/dialog_notification_annoy_seekbar"
-        android:layout_width="fill_parent" 
+        android:layout_width="275dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:max="4"
-        android:progress="2"
-        />
+        android:progress="2" />
 
 </LinearLayout>
