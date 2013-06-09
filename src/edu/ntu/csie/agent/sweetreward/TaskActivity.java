@@ -14,9 +14,10 @@ import android.widget.TextView;
 
 public class TaskActivity extends Activity {
 	private static final String TAG = TaskActivity.class.getSimpleName();
-	
+
 	private SeekBar mSeekBar;
 	private ServerConnection mServerConnection;
+	private int mTaskId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +25,11 @@ public class TaskActivity extends Activity {
 
 		Bundle bundle = this.getIntent().getExtras();
 		String msg = bundle.getString("content");
-		Log.d(TAG, "content: " + msg);
+		mTaskId = bundle.getInt("task_id");
+		Log.d(TAG, "content: " + msg + " task id: " + String.valueOf(mTaskId));
 
 		mServerConnection = ServerConnection.getServerConnection();
-		mServerConnection.clickNotification();
+		mServerConnection.clickNotification(mTaskId);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = getLayoutInflater();;
@@ -44,14 +46,14 @@ public class TaskActivity extends Activity {
 		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(1, annoy);
+				mServerConnection.responseNotification(mTaskId, 1, annoy);
 				finish();
 			}
 		});
 		builder.setNegativeButton(getString(R.string.cencel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(0, annoy);
+				mServerConnection.responseNotification(mTaskId, 0, annoy);
 				finish();
 			}
 		});
