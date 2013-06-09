@@ -27,6 +27,7 @@ public class TaskActivity extends Activity {
 		Log.d(TAG, "content: " + msg);
 
 		mServerConnection = ServerConnection.getServerConnection();
+		mServerConnection.clickNotification();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = getLayoutInflater();;

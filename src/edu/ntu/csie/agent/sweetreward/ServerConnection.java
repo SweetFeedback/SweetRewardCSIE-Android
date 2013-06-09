@@ -64,10 +64,26 @@ public class ServerConnection {
 			return false;
 		}
 	}
+	
+	public Boolean clickNotification() {
+		if (!isNetworkAvailable()) {
+			Log.d(TAG, "click notification, NO network");
+			return false;
+		}
+		
+		String user_id = "223";
+		String task_id = "11";
+		String httpUrl = String.format("%s/notification_click?task_id=%s&user_id=%s", APIDomain, task_id, user_id);
+		Log.d(TAG, httpUrl);
+		ServerTask task = new ServerTask();
+		task.execute(httpUrl);
+		
+		return true;
+	}
 
 	public Boolean responseNotification(int ok, int annoy_level) {
 		if (!isNetworkAvailable()) {
-			Log.d(TAG, "login, NO network");
+			Log.d(TAG, "response notification, NO network");
 			return false;
 		}
 		
