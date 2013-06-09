@@ -74,6 +74,8 @@ public class User {
     
     public void setFacebookID(String id) {
         mFacebookID = id;
+        mSettingEditor.putString("fb_id", mFacebookID);
+        mSettingEditor.commit();
     }
     
     public void setFacebookName(String name) {

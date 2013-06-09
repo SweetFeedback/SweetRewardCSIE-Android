@@ -71,8 +71,8 @@ public class ServerConnection {
 			return false;
 		}
 
-		String user_id = "223";
-		String httpUrl = String.format("%s/notification_click?task_id=%s&user_id=%s", APIDomain, taskId, user_id);
+		String fb_id = mUser.getFacebookID();
+		String httpUrl = String.format("%s/notification_click?task_id=%s&user_id=%s", APIDomain, taskId, fb_id);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
@@ -86,8 +86,8 @@ public class ServerConnection {
 			return false;
 		}
 
-		String user_id = "223";
-		String httpUrl = String.format("%s/notification_response?task_id=%s&user_id=%s&ok=%d&annoy_level=%d", APIDomain, taskId, user_id, ok, annoy_level);
+		String fb_id = mUser.getFacebookID();
+		String httpUrl = String.format("%s/notification_response?task_id=%s&user_id=%s&ok=%d&annoy_level=%d", APIDomain, taskId, fb_id, ok, annoy_level);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
