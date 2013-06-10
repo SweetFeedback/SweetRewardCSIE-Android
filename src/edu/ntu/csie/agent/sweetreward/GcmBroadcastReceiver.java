@@ -3,6 +3,7 @@ package edu.ntu.csie.agent.sweetreward;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -52,12 +53,13 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(ctx)
-		.setSmallIcon(R.drawable.ic_launcher)
+		.setSmallIcon(R.drawable.logo)
 		.setContentTitle("SweetFeedback")
 		.setAutoCancel(true)
 		.setStyle(new NotificationCompat.BigTextStyle()
 		.bigText(msg))
-		.setContentText(msg);
+		.setContentText(msg)
+		.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS);
 
 		mBuilder.setContentIntent(contentIntent);
 
