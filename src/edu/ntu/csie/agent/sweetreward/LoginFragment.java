@@ -39,7 +39,7 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
     private LinearLayout mProgress;
 
 
-    private ServerConnection serverConnection;
+    private ServerConnection mServerConnection;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -67,7 +67,7 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
         mWelcome = (TextView) view.findViewById(R.id.welcome);
         
         
-        serverConnection = ServerConnection.getServerConnection();
+        mServerConnection = ServerConnection.getServerConnection();
         
         mProgress = (LinearLayout) view.findViewById(R.id.headerProgressLinearLayout);
         mEditTextAccount = (EditText) view.findViewById(R.id.edit_text_account);
@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
                 
                 String account = mEditTextAccount.getText().toString();
                 String password = mEditTextPassword.getText().toString();
-                if (!serverConnection.login(account, password, LoginFragment.this)) {
+                if (!mServerConnection.login(account, password, LoginFragment.this)) {
                 	LoginFragment.this.mProgress.setVisibility(View.GONE);
                 }
             }
@@ -163,6 +163,8 @@ public class LoginFragment extends Fragment implements OnTaskCompleted {
                         mUser.setFacebookID(user.getId());
                         mUser.setFacebookName(user.getName());
                         mWelcome.setText("Hello " + mUser.getFacebookName());
+                        
+                        mServerConnection.registerGCMId();
                     }
                 }
                 if (response.getError() != null) {

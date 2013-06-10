@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.internal.eq.f;
+
 import android.R.bool;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -64,6 +66,34 @@ public class ServerConnection {
 			return false;
 		}
 	}
+	
+	public Boolean registerGCMId() {
+		Log.d(TAG, "register GCM id");
+		if(mUser.isRegisteredGCMId()) {
+			Log.d(TAG, "register GCM id, done before, abort");
+			return false;
+		}
+		if (!isNetworkAvailable()) {
+			Log.d(TAG, "register GCM Id, NO network");
+			return false;
+		}
+		
+		String gcmId = mUser.getGCMID();
+		String facebookId = mUser.getFacebookID();
+		if("".equals(facebookId)) {
+			Log.d(TAG, "register GCM Id, facebook id empty");
+			return false;
+		}
+		
+		String httpUrl = String.format("%s/register_gcm_id?reg_id=%s&user_id=%s", APIDomain, gcmId, facebookId);
+		Log.d(TAG, httpUrl);
+		ServerTask task = new ServerTask();
+		task.execute(httpUrl);
+		
+		mUser.setIsGCMRegistered(true); // this should be called if the task is executed successfully
+		
+		return true;
+	}
 
 	public Boolean clickNotification(int taskId) {
 		if (!isNetworkAvailable()) {
@@ -72,6 +102,10 @@ public class ServerConnection {
 		}
 
 		String fb_id = mUser.getFacebookID();
+		if("".equals(fb_id)) {
+			return false;
+		}
+		
 		String httpUrl = String.format("%s/notification_click?task_id=%s&user_id=%s", APIDomain, taskId, fb_id);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
@@ -87,6 +121,10 @@ public class ServerConnection {
 		}
 
 		String fb_id = mUser.getFacebookID();
+		if("".equals(fb_id)) {
+			return false;
+		}
+		
 		String httpUrl = String.format("%s/notification_response?task_id=%s&user_id=%s&ok=%d&annoy_level=%d", APIDomain, taskId, fb_id, ok, annoy_level);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();

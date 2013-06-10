@@ -21,6 +21,7 @@ public class TaskActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "on create task activity");
 		super.onCreate(savedInstanceState);
 
 		Bundle bundle = this.getIntent().getExtras();
@@ -29,7 +30,7 @@ public class TaskActivity extends Activity {
 		Log.d(TAG, "content: " + msg + " task id: " + String.valueOf(mTaskId));
 
 		mServerConnection = ServerConnection.getServerConnection();
-		mServerConnection.clickNotification(mTaskId);
+		//mServerConnection.clickNotification(mTaskId);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = getLayoutInflater();;
