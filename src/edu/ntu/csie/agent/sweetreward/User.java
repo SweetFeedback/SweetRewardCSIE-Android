@@ -12,6 +12,9 @@ public class User {
     private String mFacebookID;
     private String mFacebookName;
     
+    private String mGCMID;
+    private Boolean mIsGCMRegistered;
+    
     private SharedPreferences mSettings;
     private SharedPreferences.Editor mSettingEditor;
     
@@ -35,23 +38,46 @@ public class User {
     }
     
     public String getAccount() {
+    	if(mAccount == null)
+    		mAccount = mSettings.getString("account", "");
         return mAccount;
     }
     
     public String getPassword() {
+    	if(mPassword == null)
+    		mPassword = mSettings.getString("password", "");
         return mPassword;
     }
     
     public String getToken() {
+    	if(mToken == null)
+    		mToken = mSettings.getString("token", "");
         return mToken;
     }
     
     public String getFacebookName() {
+    	if(mFacebookName == null)
+    		mFacebookName = mSettings.getString("facebook_name", "");
         return mFacebookName;
     }
     
     public String getFacebookID() {
+    	if(mFacebookID == null)
+    		mFacebookID = mSettings.getString("facebook_id", "");
         return mFacebookID;
+    }
+    
+    public String getGCMID() {
+    	if(mGCMID == null)
+    		mGCMID = mSettings.getString("registration_id", "");
+    	return mGCMID;
+    }
+    
+    public Boolean isRegisteredGCMId() {
+    	if(mIsGCMRegistered == null)
+    		mIsGCMRegistered = mSettings.getBoolean("is_registered", false);
+    	Log.d("OHO", "registered " + mIsGCMRegistered.toString());
+    	return mIsGCMRegistered;
     }
     
     public void setAccount(String account) {
@@ -74,14 +100,26 @@ public class User {
     
     public void setFacebookID(String id) {
         mFacebookID = id;
-        mSettingEditor.putString("fb_id", mFacebookID);
+        mSettingEditor.putString("facebook_id", mFacebookID);
         mSettingEditor.commit();
     }
     
     public void setFacebookName(String name) {
         mFacebookName = name;
+        mSettingEditor.putString("facebook_name", mGCMID);
+        mSettingEditor.commit();
     }
     
+    public void setGCMID(String GCMID) {
+    	mGCMID = GCMID;
+    	mSettingEditor.putString("registration_id", mGCMID);
+        mSettingEditor.commit();
+    }
     
-
+    public void setIsGCMRegistered(Boolean isGCMRegistered) {
+    	mIsGCMRegistered = isGCMRegistered;
+    	Log.d("OHO", "set registered " + mIsGCMRegistered.toString());
+    	mSettingEditor.putBoolean("is_registered", mIsGCMRegistered);
+    	mSettingEditor.commit();
+    }
 }

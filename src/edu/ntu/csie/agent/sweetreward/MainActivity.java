@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	private WebView webView;
 
 	private User mUser;
-	private ServerConnection serverConnection;
+	private ServerConnection mServerConnection;
 
 	private MediaPlayer mMediaPlayer;
 
@@ -45,8 +45,8 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 		setContentView(R.layout.activity_main);
 
 		mUser = User.getUser(getApplicationContext());
-		serverConnection = ServerConnection.getServerConnection();
-		serverConnection.setContext(getApplicationContext());
+		mServerConnection = ServerConnection.getServerConnection();
+		mServerConnection.setContext(getApplicationContext());
 
 		webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
@@ -56,13 +56,14 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 		mMediaPlayer = MediaPlayer.create(this, R.raw.reward);
 
 		prefs = getSharedPreferences(MainActivity.class.getSimpleName(), Context.MODE_PRIVATE);
-		regid = prefs.getString(PROPERTY_REG_ID, null);
+		
+		regid = mUser.getGCMID();
 
 		// If there is no registration ID, the app isn't registered.
 		// Call registerBackground() to register it.
 		gcm = GoogleCloudMessaging.getInstance(this);
-
-		if (regid == null) {
+		
+		if (regid == null || "".equals(regid)) {
 			Log.d(TAG, "start register GCM");
 			registerBackground();
 		}
@@ -80,10 +81,9 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 				try {
 					regid = gcm.register(GCM_SENDER_ID);
 					msg = "Device registered, registration id=" + regid;
-
-					SharedPreferences.Editor editor = prefs.edit();
-					editor.putString(PROPERTY_REG_ID, regid);
-					editor.commit();
+					
+					
+					mUser.setGCMID(regid);
 				} catch (IOException ex) {
 					msg = "Error :" + ex.getMessage();
 				}
@@ -181,7 +181,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 					Log.e(TAG, "Error: unknown QRCode type");
 				}
 
-				serverConnection.reportWindow(this, windowID, action);
+				mServerConnection.reportWindow(this, windowID, action);
 
 
 			} else if (resultCode == RESULT_CANCELED) {
