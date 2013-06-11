@@ -15,6 +15,7 @@ public class TaskActivity extends Activity {
 	private SeekBar mSeekBar;
 	private ServerConnection mServerConnection;
 	private int mProblemId;
+	private AlertDialog mDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +54,18 @@ public class TaskActivity extends Activity {
 				finish();
 			}
 		});
-		AlertDialog dialog = builder.create();
 
-		dialog.show();
+		mDialog = builder.create();
+		mDialog.show();
+	}
+	
+	@Override
+	protected void onStop() {
+		Log.d(TAG, "on stop task activity");
+		if(mDialog != null)
+			mDialog.cancel();
+		super.onStop();
+		finish();
 	}
 	
 	private void init() {
