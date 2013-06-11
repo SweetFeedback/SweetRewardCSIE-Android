@@ -3,6 +3,7 @@ package edu.ntu.csie.agent.sweetreward;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -83,9 +84,9 @@ public class ServerConnection {
 		String httpUrl;
 		
 		if("".equals(facebookId)) {
-			httpUrl = String.format("%s/register_gcm_id?gcm_id=%s", APIDomain, gcmId);
+			httpUrl = String.format(Locale.US, "%s/register_gcm_id?gcm_id=%s", APIDomain, gcmId);
 		} else {
-			httpUrl = String.format("%s/register_gcm_id?gcm_id=%s&user_id=%s", APIDomain, gcmId, facebookId);
+			httpUrl = String.format(Locale.US, "%s/register_gcm_id?gcm_id=%s&user_id=%s", APIDomain, gcmId, facebookId);
 			mUser.setIsGCMRegistered(true); // this should be called if the task is executed successfully
 		}
 		
@@ -107,7 +108,7 @@ public class ServerConnection {
 			return false;
 		}
 		
-		String httpUrl = String.format("%s/notification_click?problem_id=%s&gcm_id=%s", APIDomain, problemId, gcm_id);
+		String httpUrl = String.format(Locale.US, "%s/notification_click?problem_id=%s&gcm_id=%s", APIDomain, problemId, gcm_id);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
@@ -126,7 +127,7 @@ public class ServerConnection {
 			return false;
 		}
 		
-		String httpUrl = String.format("%s/notification_response?problem_id=%s&gcm_id=%s&ok=%d&annoy_level=%d", APIDomain, problemId, gcm_id, ok, annoy_level);
+		String httpUrl = String.format(Locale.US, "%s/notification_response?problem_id=%s&gcm_id=%s&ok=%d&annoy_level=%d", APIDomain, problemId, gcm_id, ok, annoy_level);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
@@ -139,7 +140,7 @@ public class ServerConnection {
 			Log.d(TAG, "login, NO network");
 			return false;
 		}
-		String httpUrl = String.format("%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
+		String httpUrl = String.format(Locale.US, "%s/%s/mobile/createNewUser.php?account=%s&password=%s", APIDomain, APIPath, account, password);
 
 		ServerTask task = new ServerTask(listener);
 		task.execute(httpUrl);
@@ -155,9 +156,9 @@ public class ServerConnection {
 		String token = mUser.getToken();
 		String httpUrl = "";
 		if (action == -1) {
-			httpUrl = String.format("%s/%s/userActionTrigger.php?window_id=%d&token=%s", APIDomain, APIPath, windowID, token);
+			httpUrl = String.format(Locale.US, "%s/%s/userActionTrigger.php?window_id=%d&token=%s", APIDomain, APIPath, windowID, token);
 		} else if (action != -1) {
-			httpUrl= String.format("%s/%s/userActionTrigger.php?window_id=%d&token=%s&action=%d", APIDomain, APIPath, windowID, token, action);
+			httpUrl= String.format(Locale.US, "%s/%s/userActionTrigger.php?window_id=%d&token=%s&action=%d", APIDomain, APIPath, windowID, token, action);
 		}
 
 		ServerTask task = new ServerTask(listener);
