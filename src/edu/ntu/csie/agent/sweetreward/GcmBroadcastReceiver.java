@@ -33,22 +33,22 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
 		} else {
 			Bundle bundle = intent.getExtras();
 			String content = bundle.getString("data");
-			int taskId = Integer.parseInt(bundle.getString("task_id"));
+			int problemId = Integer.parseInt(bundle.getString("problem_id"));
 
-			Log.d(TAG, "task: " + content + " " + String.valueOf(taskId));
+			Log.d(TAG, "problem: " + content + " " + String.valueOf(problemId));
 
-			sendNotification(content, taskId);
+			sendNotification(content, problemId);
 		}
 		setResultCode(Activity.RESULT_OK);
 	}
 
 	// Put the GCM message into a notification and post it.
-	private void sendNotification(String msg, int taskId) {
+	private void sendNotification(String msg, int problemId) {
 		mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		Intent intent = new Intent(ctx, TaskActivity.class);
 		intent.putExtra("content", msg);
-		intent.putExtra("task_id", taskId);
+		intent.putExtra("problem_id", problemId);
 		PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		NotificationCompat.Builder mBuilder =

@@ -6,18 +6,15 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.TextureView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 public class TaskActivity extends Activity {
 	private static final String TAG = TaskActivity.class.getSimpleName();
 
 	private SeekBar mSeekBar;
 	private ServerConnection mServerConnection;
-	private int mTaskId;
+	private int mProblemId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +23,11 @@ public class TaskActivity extends Activity {
 
 		Bundle bundle = this.getIntent().getExtras();
 		String msg = bundle.getString("content");
-		mTaskId = bundle.getInt("task_id");
-		Log.d(TAG, "content: " + msg + " task id: " + String.valueOf(mTaskId));
+		mProblemId = bundle.getInt("problem_id");
+		Log.d(TAG, "content: " + msg + " task id: " + String.valueOf(mProblemId));
 
 		mServerConnection = ServerConnection.getServerConnection();
-		//mServerConnection.clickNotification(mTaskId);
+		mServerConnection.clickNotification(mProblemId);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = getLayoutInflater();;
@@ -38,23 +35,20 @@ public class TaskActivity extends Activity {
 		mSeekBar = (SeekBar) view.findViewById(R.id.dialog_notification_annoy_seekbar);
 
 
-		//TextView msgTextView = (TextView) view.findViewById(R.id.dialog_notification_msg_textview);
-		//msgTextView.setText(msg);
-
 		builder.setView(view);
 		builder.setMessage(msg + "\n\nDo you feel annoyed?");
 		builder.setTitle("Would you please ...");
 		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(mTaskId, 1, annoy);
+				mServerConnection.responseNotification(mProblemId, 1, annoy);
 				finish();
 			}
 		});
 		builder.setNegativeButton(getString(R.string.cencel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(mTaskId, 0, annoy);
+				mServerConnection.responseNotification(mProblemId, 0, annoy);
 				finish();
 			}
 		});
