@@ -1,5 +1,9 @@
 package edu.ntu.csie.agent.sweetreward;
 
+import java.security.SecureRandom;
+import java.util.Random;
+import java.math.BigInteger;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -17,6 +21,7 @@ public class TaskActivity extends Activity {
 	private ServerConnection mServerConnection;
 	private int mProblemId;
 	private AlertDialog mDialog;
+	private int problemID;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +34,9 @@ public class TaskActivity extends Activity {
 		Log.d(TAG, "content: " + msg + " task id: " + String.valueOf(mProblemId));
 		
 		init();
+		generateProblemID();
 
-		mServerConnection.clickNotification(mProblemId);
+		mServerConnection.clickNotification(mProblemId, problemID);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		LayoutInflater inflater = getLayoutInflater();;
@@ -44,14 +50,20 @@ public class TaskActivity extends Activity {
 		builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(mProblemId, 1, annoy);
+				mServerConnection.responseNotification(1, annoy, problemID);
+				Log.d(TAG, "dismiss dialog");
+				dialog.dismiss();
+				Log.d(TAG, "finish activity");
 				finish();
 			}
 		});
 		builder.setNegativeButton(getString(R.string.cencel), new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(mProblemId, 0, annoy);
+				mServerConnection.responseNotification(0, annoy, problemID);
+				Log.d(TAG, "dismiss dialog");
+				dialog.dismiss();
+				Log.d(TAG, "finish activity");
 				finish();
 			}
 		});
@@ -61,7 +73,7 @@ public class TaskActivity extends Activity {
 			public void onCancel(DialogInterface dialog) {
 				Log.d(TAG, "on cancel dialog");
 				int annoy = mSeekBar.getProgress();
-				mServerConnection.responseNotification(mProblemId, 2, annoy);
+				mServerConnection.responseNotification(2, annoy, problemID);
 				finish();
 			}
 		});
@@ -73,8 +85,9 @@ public class TaskActivity extends Activity {
 	@Override
 	protected void onStop() {
 		Log.d(TAG, "on stop task activity");
-		if(mDialog != null)
-			mDialog.cancel();
+		if (mDialog != null) {
+			mDialog.dismiss();
+		}
 		super.onStop();
 		finish();
 	}
@@ -83,6 +96,12 @@ public class TaskActivity extends Activity {
 		User.getUser(getApplicationContext());
 		mServerConnection = ServerConnection.getServerConnection();
 		mServerConnection.setContext(getApplicationContext());
+	}
+	
+	private void generateProblemID() {
+		Random random = new Random();
+		problemID = random.nextInt();
+		Log.d(TAG, "generate int: " + String.valueOf(problemID));
 	}
 
 }
