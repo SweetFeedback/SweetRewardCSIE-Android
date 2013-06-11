@@ -53,7 +53,7 @@ public class ServerConnection {
 		mAppContext = context;
 	}
 
-	private Boolean isNetworkAvailable() {
+	public Boolean isNetworkAvailable() {
 		if(null == mConnectivityManager) {  
 			mConnectivityManager = (ConnectivityManager)mAppContext.getSystemService(Context.CONNECTIVITY_SERVICE);  
 		}

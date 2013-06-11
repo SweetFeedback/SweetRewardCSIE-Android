@@ -16,7 +16,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -24,6 +26,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private WebView webView;
+	private TextView mNoNetworkTextView;
 
 	private User mUser;
 	private ServerConnection mServerConnection;
@@ -47,6 +50,8 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 		mUser = User.getUser(getApplicationContext());
 		mServerConnection = ServerConnection.getServerConnection();
 		mServerConnection.setContext(getApplicationContext());
+		
+		mNoNetworkTextView = (TextView) findViewById(R.id.noNetworkTextView_mainActivity);
 
 		webView = (WebView) findViewById(R.id.webView);
 		//webView.getSettings().setJavaScriptEnabled(true);
@@ -67,8 +72,6 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 			Log.d(TAG, "start register GCM");
 			registerBackground();
 		}
-
-
 	}
 
 
@@ -98,13 +101,20 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 		}.execute(null, null, null);
 	}
 
-
+	
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		if (mServerConnection.isNetworkAvailable()) {
+			mNoNetworkTextView.setVisibility(View.GONE);
+		} else {
+			mNoNetworkTextView.setVisibility(View.VISIBLE);
+		}
 
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
