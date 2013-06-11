@@ -3,6 +3,7 @@ package edu.ntu.csie.agent.sweetreward;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +52,16 @@ public class TaskActivity extends Activity {
 			public void onClick(DialogInterface dialog, int id) {
 				int annoy = mSeekBar.getProgress();
 				mServerConnection.responseNotification(mProblemId, 0, annoy);
+				finish();
+			}
+		});
+		
+		builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				Log.d(TAG, "on cancel dialog");
+				int annoy = mSeekBar.getProgress();
+				mServerConnection.responseNotification(mProblemId, 2, annoy);
 				finish();
 			}
 		});
