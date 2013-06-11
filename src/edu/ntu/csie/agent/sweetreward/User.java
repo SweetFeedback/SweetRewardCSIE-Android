@@ -25,9 +25,7 @@ public class User {
     }
     
     public static User getUser(Context context) {
-        if (sSingleton == null) {
-            sSingleton = new User(context);
-        }
+        sSingleton = new User(context);
 
         return sSingleton;
     }

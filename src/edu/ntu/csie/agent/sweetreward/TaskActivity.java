@@ -25,8 +25,9 @@ public class TaskActivity extends Activity {
 		String msg = bundle.getString("content");
 		mProblemId = bundle.getInt("problem_id");
 		Log.d(TAG, "content: " + msg + " task id: " + String.valueOf(mProblemId));
+		
+		init();
 
-		mServerConnection = ServerConnection.getServerConnection();
 		mServerConnection.clickNotification(mProblemId);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -55,6 +56,12 @@ public class TaskActivity extends Activity {
 		AlertDialog dialog = builder.create();
 
 		dialog.show();
+	}
+	
+	private void init() {
+		User.getUser(getApplicationContext());
+		mServerConnection = ServerConnection.getServerConnection();
+		mServerConnection.setContext(getApplicationContext());
 	}
 
 }
