@@ -93,6 +93,7 @@ public class MainActivity extends Activity implements OnTaskCompleted {
 			@Override
 			protected void onPostExecute(Object msg) {
 				Log.d(TAG, "register done: " + msg);
+				mServerConnection.registerGCMId();
 			}
 		}.execute(null, null, null);
 	}

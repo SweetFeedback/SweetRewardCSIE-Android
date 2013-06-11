@@ -80,17 +80,18 @@ public class ServerConnection {
 		
 		String gcmId = mUser.getGCMID();
 		String facebookId = mUser.getFacebookID();
+		String httpUrl;
+		
 		if("".equals(facebookId)) {
-			Log.d(TAG, "register GCM Id, facebook id empty");
-			return false;
+			httpUrl = String.format("%s/register_gcm_id?gcm_id=%s", APIDomain, gcmId);
+		} else {
+			httpUrl = String.format("%s/register_gcm_id?gcm_id=%s&user_id=%s", APIDomain, gcmId, facebookId);
+			mUser.setIsGCMRegistered(true); // this should be called if the task is executed successfully
 		}
 		
-		String httpUrl = String.format("%s/register_gcm_id?gcm_id=%s&user_id=%s", APIDomain, gcmId, facebookId);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
-		
-		mUser.setIsGCMRegistered(true); // this should be called if the task is executed successfully
 		
 		return true;
 	}

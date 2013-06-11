@@ -76,7 +76,7 @@ public class User {
     public Boolean isRegisteredGCMId() {
     	if(mIsGCMRegistered == null)
     		mIsGCMRegistered = mSettings.getBoolean("is_registered", false);
-    	Log.d("OHO", "registered " + mIsGCMRegistered.toString());
+
     	return mIsGCMRegistered;
     }
     
