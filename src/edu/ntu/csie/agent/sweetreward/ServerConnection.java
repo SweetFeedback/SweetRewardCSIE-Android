@@ -97,7 +97,7 @@ public class ServerConnection {
 		return true;
 	}
 
-	public Boolean clickNotification(int problemId, int notificationId) {
+	public Boolean openNotification(int id) {
 		if (!isNetworkAvailable()) {
 			Log.d(TAG, "click notification, NO network");
 			return false;
@@ -108,7 +108,7 @@ public class ServerConnection {
 			return false;
 		}
 		
-		String httpUrl = String.format(Locale.US, "%s/notification_click?problem_id=%s&gcm_id=%s&notification_id=%d", APIDomain, problemId, gcm_id, notificationId);
+		String httpUrl = String.format(Locale.US, "%s/open_notification?id=%d", APIDomain, id);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
@@ -116,13 +116,13 @@ public class ServerConnection {
 		return true;
 	}
 
-	public Boolean responseNotification(int ok, int annoy_level, int notificationId) {
+	public Boolean responseNotification(int id, int action, int annoy_level) {
 		if (!isNetworkAvailable()) {
 			Log.d(TAG, "response notification, NO network");
 			return false;
 		}
 		
-		String httpUrl = String.format(Locale.US, "%s/notification_response?ok=%d&annoy_level=%d&notification_id=%d", APIDomain, ok, annoy_level, notificationId);
+		String httpUrl = String.format(Locale.US, "%s/response_notification?id=%d&action=%d&annoy_level=%d", APIDomain, id, action, annoy_level);
 		Log.d(TAG, httpUrl);
 		ServerTask task = new ServerTask();
 		task.execute(httpUrl);
